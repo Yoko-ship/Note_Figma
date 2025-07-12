@@ -1,0 +1,87 @@
+.dialog{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  border: none;
+  border-radius: 15px;
+  padding: 1rem;
+  width: 50%;
+}
+.dialog > div{
+  display: flex;
+  justify-content: flex-end;
+  margin: 1rem ; 
+}
+.dialog > div button{
+  border: none;
+  background: none;
+  color: #AFAFAF;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.dialog h2{
+  text-align: center;
+}
+.inputs{
+  margin: 2.5rem 0;
+}
+.inputs form{
+  margin-left: 2rem;
+}
+.inputs form{
+  display: flex;
+  flex-direction: column;
+}
+.inputs form input{
+  padding: 1rem;
+  border: 1px solid #ccc;
+  outline: none;
+  border-radius: 10px;
+  font-size: 1.3rem;
+  margin: 1rem 0
+
+}
+.inputs form label{
+  text-align: center;
+}
+.inputs form h3{
+  text-align: center;
+}
+.prioritize{
+  margin: 2rem 0;
+  display: flex;
+  justify-content: space-evenly;
+}
+.prioritize button{
+  border-radius: 15px;
+  padding: 0.6rem;
+  border: none;
+  cursor: pointer;
+  color: #FFFFFF;
+}
+.urgent{
+  background-color: #FB6868; 
+}
+.short{
+  background-color: #FF985C;
+}
+.chill{
+  background-color: #46BEA6;
+}
+.add{
+  width: 50%;
+  margin: 0 auto;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: none;
+  background-color: fuchsia;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.backdrop{
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
