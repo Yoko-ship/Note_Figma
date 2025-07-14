@@ -7,3 +7,4 @@ export const pool = new Pool({
     host:process.env.NEXT_PUBLIC_HOST,
     user:process.env.NEXT_PUBLIC_USER,
 })
+

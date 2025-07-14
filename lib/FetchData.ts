@@ -14,3 +14,4 @@ export const loginHanlder = async(url:string,data:{email:string,password:string}
     setSuccess(status.success)
     return token
 }
+

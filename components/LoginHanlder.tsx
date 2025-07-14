@@ -1,49 +1,46 @@
 "use client";
-import React, { FormEvent, useState } from "react";
-import classes from "@/app/signUp/page.module.css";
+import React, {useState } from "react";
+import classes from "@/app/signIn/page.module.css";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import { loginHanlder } from "@/lib/FetchData";
-import { useAppSelect } from "@/store/hooks";
-import { useAppDispatch } from "@/store/hooks";
-import { addToken } from "@/store/handler";
-import { useDispatch } from "react-redux";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 function LoginHanlder() {
-  const pathname = usePathname();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  
-  const dispatch = useDispatch();
+  const router = useRouter()
 
-  const formHanlder = async (e: FormEvent) => {
+  const formHanlder: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    if (pathname === "/signUp") {
-      if (password !== confirmPassword) {
-        setError("Пароли не совпадают");
-      } else {
-        const token = await loginHanlder(
-          "/api/register",
-          { email, password },
-          setError,
-          setSuccess
-        );
-        dispatch(addToken(token));
-        localStorage.setItem("token", token);
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email");
+    const password = formData.get("password");
+    const confirmPassword = formData.get("confirmPassword");
+    if (password === confirmPassword) {
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json();
+      if (data?.error) {
+        setError(data.error);
+      }
+      if (data?.success) {
+        setSuccess(data.success);
+        const res = await signIn("credentials", {
+          email: email,
+          password: password,
+          redirect: false,
+        });
+        if (res && !res.error) {
+          router.push("/profile");
+        }
       }
     } else {
-      const token = await loginHanlder(
-        "/api/login",
-        { email, password },
-        setError,
-        setSuccess
-      );
-      dispatch(addToken(token));
-      localStorage.setItem("token", token);
+      setError("Пароли не совпадают");
     }
   };
 
@@ -62,38 +59,24 @@ function LoginHanlder() {
       <div className={classes.right}>
         <form onSubmit={formHanlder}>
           <label>Почта</label>
-          <input
-            type="email"
-            placeholder="Почта"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            required
-          />
+          <input type="email" placeholder="Почта" name="email" required />
           <label>Пароль</label>
           <input
             type="password"
             placeholder="Пароль"
             required
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
+            name="password"
             minLength={8}
           />
-          {pathname === "/signUp" && (
-            <>
-              <label>Подтверждение</label>
-              <input
-                type="password"
-                placeholder="Подтвердите пароль"
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                value={confirmPassword}
-                required
-              />
-            </>
-          )}
+
+          <label>Подтверждение</label>
+          <input
+            type="password"
+            placeholder="Подтвердите пароль"
+            name="confirmPassword"
+            required
+          />
           <div className={classes.buttons}>
-            {pathname === "/login" && (
-              <Link href="/signUp">Создать аккаунт</Link>
-            )}
             <button>Подтвердить</button>
           </div>
 

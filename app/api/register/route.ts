@@ -16,7 +16,6 @@ export  async function GET(){
 
 }
 
-const secretKey = process.env.NEXT_PUBLIC_SECRET_KEY
 export async function POST(req:NextRequest){
     const body = await req.json()
     const {email,password } = body

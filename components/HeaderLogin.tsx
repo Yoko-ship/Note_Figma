@@ -1,34 +1,22 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { useAppSelect } from "@/store/hooks";
-import { useAppDispatch } from "@/store/hooks";
-import { addToken } from "@/store/handler";
+
+import { useSession, signOut } from "next-auth/react";
 function HeaderLogin() {
-  const data = useAppSelect((state) => state.note.token);
-  const dispatch = useAppDispatch()
-  
 
-  const leaveBtn = () => {
-    localStorage.removeItem("token");
-    dispatch(addToken(""));
-  };
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      dispatch(addToken(token));
-    }
-  }, [dispatch]);
+  const session = useSession();
 
   return (
     <>
-      {data ? (
-        <Link href={""} onClick={leaveBtn}>
+
+      {session?.data && <Link href="/profile">Профиль</Link>}
+      {session?.data ? (
+        <Link href="#" onClick={() => signOut({ callbackUrl: "/" })}>
           Выйти
         </Link>
       ) : (
-        <Link href={"/login"}>Войти</Link>
+        <Link href="/signIn">Войти</Link>
       )}
     </>
   );

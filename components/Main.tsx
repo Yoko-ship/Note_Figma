@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent } from "react";
+import React from "react";
 import classes from "@/app/page.module.css";
 import Image from "next/image";
 import { ViewToggle } from "./List";
@@ -10,18 +10,12 @@ function Main() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
 
-  const testHanlder = async() =>{
-    const response = await fetch("/api/user",{
-      method:"GET"
-    })
-    setIsOpen(true)
-  }
 
 
   return (
     <>
       <section className={classes.addMenu}>
-        <button onClick={testHanlder}>Добавить</button>
+        <button onClick={() => setIsOpen(true)}>Добавить</button>
         <ViewToggle setView={setView} view={view} />
       </section>
       <section className={classes.emptyData}>

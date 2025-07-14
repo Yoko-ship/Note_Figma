@@ -1,12 +1,12 @@
-'use client'
-import React from 'react'
-import { Provider } from 'react-redux'
-import { makeStore } from '@/store/store'
-function ComponentProvider({children}:any) {
-    const store = makeStore()
+"use client";
+import React from "react";
+import { SessionProvider } from "next-auth/react";
+function ComponentProvider({ children }: any) {
   return (
-    <Provider store={store}>{children}</Provider>
-  )
+    <SessionProvider>
+      {children}
+    </SessionProvider>
+  );
 }
 
-export default ComponentProvider
+export default ComponentProvider;
