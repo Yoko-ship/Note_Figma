@@ -2,6 +2,7 @@
 import React, { FormEvent, SetStateAction, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import classes from "./modal.module.css";
+import { useSession } from "next-auth/react";
 function Modal({
   isOpen,
   setIsOpen,
@@ -10,21 +11,35 @@ function Modal({
   setIsOpen: React.Dispatch<SetStateAction<boolean>>;
 }) {
   const [mounted, setMounted] = useState(false);
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [data, setData] = useState<string>("");
-  const [type, setType] = useState("chill");
+  const [priority, setPriority] = useState("chill");
+  const [success,setSuccess] = useState("")
+  const session = useSession()
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const formHanlder = (e: FormEvent) => {
+  const formHanlder:React.FormEventHandler<HTMLFormElement> = async(e) => {
     e.preventDefault();
-    console.log(title);
-    console.log(description);
-    console.log(type);
-    console.log(data);
+    const formData = new FormData(e.currentTarget);
+    const title = formData.get("title");
+    const description = formData.get("description");
+    const deadline = formData.get("deadline");
+    const userEmail = session.data?.user?.email
+    
+    const response = await fetch("/api/notes",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({title,deadline,description,priority,userEmail})
+    })
+    const data = await response.json()
+    if(data.success){
+      setSuccess(data.success)
+      setIsOpen(false)
+      
+    }
   };
 
   if (!mounted) return;
@@ -44,23 +59,20 @@ function Modal({
             <input
               type="text"
               placeholder="Заголовок"
-              onChange={(e) => setTitle(e.target.value)}
-              value={title}
+              name="title"
               required
             />
             <label>Описание</label>
             <input
               type="text"
               placeholder="Что вам нужно сделать?"
-              onChange={(e) => setDescription(e.target.value)}
-              value={description}
+              name="description"
               required
             />
             <label>Крайник срок</label>
             <input
               type="date"
-              onChange={(e) => setData(e.target.value)}
-              value={data}
+              name="deadline"
               required
             />
 
@@ -68,7 +80,7 @@ function Modal({
             <section className={classes.prioritize}>
               <button
                 className={classes.urgent}
-                onClick={(e) => setType(e.currentTarget.value)}
+                onClick={(e) => setPriority(e.currentTarget.value)}
                 type="button"
                 value={"urgent"}
               >
@@ -76,7 +88,7 @@ function Modal({
               </button>
               <button
                 className={classes.short}
-                onClick={(e) => setType(e.currentTarget.value)}
+                onClick={(e) => setPriority(e.currentTarget.value)}
                 type="button"
                 value={"short"}
               >
@@ -84,7 +96,7 @@ function Modal({
               </button>
               <button
                 className={classes.chill}
-                onClick={(e) => setType(e.currentTarget.value)}
+                onClick={(e) => setPriority(e.currentTarget.value)}
                 type="button"
                 value={"chill"}
               >
@@ -92,6 +104,7 @@ function Modal({
               </button>
             </section>
             <button className={classes.add}>Добавить</button>
+            <p className={classes.success}>{success}</p>
           </form>
         </section>
       </dialog>

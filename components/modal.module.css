@@ -85,6 +85,11 @@
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
 }
+.success{
+  margin-top: 1.5rem;
+  text-align: center;
+  color: green;
+}
 
 
 @media screen and (max-width:1000px) {

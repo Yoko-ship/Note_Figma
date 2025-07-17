@@ -10,7 +10,7 @@ export const ViewToggle: React.FC<{
     <div className={classes.toggleWrapper}>
       <button
         className={`${classes.toggleBtn} ${view === "grid" ? classes.active : ""}`}
-        onClick={() => setView("grid")}
+        onClick={() => setView("grids")}
         aria-label="Grid view"
       >
         <svg width="16" height="16" fill="currentColor">

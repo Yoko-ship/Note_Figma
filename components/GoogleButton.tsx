@@ -6,6 +6,7 @@ import classes from "@/app/signIn/page.module.css"
 function GoogleButton() {
     const searchParams = useSearchParams()
     const callbackUrl = searchParams.get("callbackUrl") || '/profile'
+    console.log(callbackUrl)
   return (
     <div className={classes.signButton}>
       <button onClick={() => signIn("google",{callbackUrl})} type='button'>Sign in with Google</button>

@@ -1,0 +1,42 @@
+.dialog{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border: none;
+    border-radius: 15px;
+    padding: 1rem;
+    z-index: 100;
+}
+.backdrop{
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+.dialog h2{
+    text-align: center;
+    margin:1rem 0;
+}
+.dialog > div{
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+.dialog > div button{
+    padding: 0.5rem;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 1rem;
+    border-radius: 10px;
+}
+.delete{
+    background-color: #F52222;
+
+}
+.remain{
+    background-color: #18921D;
+}
