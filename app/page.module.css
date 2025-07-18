@@ -144,6 +144,19 @@
 }
 
 
+.logNote{
+    text-align: center;
+    color: red;
+}
+
+@media screen  and (max-width:900px){
+    .toggleWrapper{
+        display: none;
+    }
+    .grids{
+        display: block;
+    }
+}
 
 @media screen and (max-width:500px){
     .addMenu{

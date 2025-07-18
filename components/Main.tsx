@@ -9,62 +9,51 @@ import { useSession } from "next-auth/react";
 import Grids from "./Grids";
 
 export type Data = {
-  id:number,
-  deadline:string,
-  description:string,
-  priority:string,
-  title:string,
-  user_email:string
-}
+  id: number;
+  deadline: string;
+  description: string;
+  priority: string;
+  title: string;
+  user_email: string;
+};
 function Main() {
   const [view, setView] = useState<string>("grids");
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [urgent,setUrgent] = useState<Data[]>()
-  const [short,setShort] = useState<Data[]>()
-  const [chill,setChill] = useState<Data[]>()
+  const [urgent, setUrgent] = useState<Data[]>();
+  const [short, setShort] = useState<Data[]>();
+  const [chill, setChill] = useState<Data[]>();
   const { data: session, status } = useSession();
 
-
   useEffect(() => {
-    if(status !== 'authenticated' || !session.user?.email) return;
+    if (status !== "authenticated" || !session.user?.email) return;
 
     const getData = async () => {
-      const response = await fetch(`/api/notes?userEmail=${session.user?.email}`, {
-        method: "GET",
-      });
-      const data:Data[] = await response.json();
+      const response = await fetch(
+        `/api/notes?userEmail=${session.user?.email}`,
+        {
+          method: "GET",
+        }
+      );
+      const data: Data[] = await response.json();
       const urgent = data.filter((type) => type.priority === "urgent");
       const short = data.filter((type) => type.priority === "short");
-      const chill = data.filter((type) => type.priority === "chill")
-      setUrgent(urgent)
+      const chill = data.filter((type) => type.priority === "chill");
+      setUrgent(urgent);
       setShort(short);
-      setChill(chill)
+      setChill(chill);
     };
-      getData();
-  }, [status,session,isOpen]);
+    getData();
+  }, [status, session, isOpen]);
 
 
 
-  // useEffect(() =>{
-  //   const createTable = async()=>{
-  //     const response = await fetch("/api/register",{
-  //       method:"GET"
-  //     })
-      
-  //     const noteResponse = await fetch("/api/notes",{
-  //       method:"GET",
-  //     })
-  //   }
-  //   createTable()
-  // },[])
-  
   return (
     <>
       <section className={classes.addMenu}>
         <button onClick={() => setIsOpen(true)}>Добавить</button>
         <ViewToggle setView={setView} view={view} />
       </section>
-      {!urgent && !short && !chill &&(
+      {!urgent && !short && !chill && (
         <section className={classes.emptyData}>
           <Image
             src={"/Empty-icon.png"}
@@ -77,11 +66,14 @@ function Main() {
         </section>
       )}
       <section className={view === "grids" ? classes.grids : classes.list}>
-        <Grids data={urgent!} setData={setUrgent}/>
-        <Grids data={short!} setData={setShort}/>
-        <Grids data={chill!} setData={setChill}/>
+        <Grids data={urgent!} setData={setUrgent} />
+        <Grids data={short!} setData={setShort} />
+        <Grids data={chill!} setData={setChill} />
       </section>
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen} />
+      {session?.user && <Modal isOpen={isOpen} setIsOpen={setIsOpen} />}
+      {!session?.user && (
+        <h2 className={classes.logNote}>Пожалуста войдите в аккаунт чтобы добавить заметки</h2>
+      )}
     </>
   );
 }
