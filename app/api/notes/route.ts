@@ -12,6 +12,7 @@ export async function GET(req:NextRequest){
             FOREIGN KEY(user_email) REFERENCES users(email) ON DELETE CASCADE            
         )
     `
+    await pool.query(createTable)
     const { searchParams } = new URL(req.url)
     const userEmail = searchParams.get("userEmail")
     const selectQuery = "SELECT * FROM notes WHERE user_email = $1"

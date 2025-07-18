@@ -45,14 +45,18 @@ function Main() {
 
 
 
-  useEffect(() =>{
-    const createTable = async()=>{
-      const response = await fetch("/api/register",{
-        method:"GET"
-      })
-    }
-    createTable()
-  },[])
+  // useEffect(() =>{
+  //   const createTable = async()=>{
+  //     const response = await fetch("/api/register",{
+  //       method:"GET"
+  //     })
+      
+  //     const noteResponse = await fetch("/api/notes",{
+  //       method:"GET",
+  //     })
+  //   }
+  //   createTable()
+  // },[])
   
   return (
     <>
