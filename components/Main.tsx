@@ -45,6 +45,15 @@ function Main() {
 
 
 
+  useEffect(() =>{
+    const createTable = async()=>{
+      const response = await fetch("/api/register",{
+        method:"GET"
+      })
+    }
+    createTable()
+  },[])
+  
   return (
     <>
       <section className={classes.addMenu}>
